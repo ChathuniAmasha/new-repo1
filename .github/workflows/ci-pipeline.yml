@@ -1,0 +1,35 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed for full history to simulate merge
+
+      - name: Check for Merge Conflicts
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch origin main
+          git merge --no-commit --no-ff origin/main || {
+            echo "::error :: Merge conflict detected with 'main'."
+            exit 1
+          }
+
+      - name: Display Directory Contents
+        run: ls -la
+
+      - name: Run Build / Tests
+        run: |
+          echo "✅ Simulate build or test here"
+          # python3 -m unittest
