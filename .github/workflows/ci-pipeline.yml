@@ -15,7 +15,7 @@ jobs:
       - name: Checkout PR Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Needed for full history to simulate merge
+          fetch-depth: 0  # Needed for full history to simulate mergee
 
       - name: Check for Merge Conflicts
         if: github.event_name == 'pull_request'
